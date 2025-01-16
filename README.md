@@ -27,7 +27,7 @@
 <span align="center">
 
 ##  Sobre o Projeto 🧐
-  #### Automatizar os testes de API com Postman e Newman dentro de um fluxo CI/CD oferece uma solução poderosa para garantir a qualidade contínua das APIs. Essa abordagem permite a validação constante da API em cada etapa do desenvolvimento, proporcionando feedback imediato, detectando falhas mais rapidamente e garantindo que apenas código validado e funcional seja promovido para ambientes de produção. Ao integrar os testes de API de forma contínua, as equipes conseguem entregar software de alta qualidade de forma ágil e sem interrupções.
+  #### Automatizar os testes de API com Postman e Newman dentro de um fluxo CI/CD oferece uma solução efetiva para garantir a qualidade contínua das APIs. Essa abordagem permite a validação constante da API em cada etapa do desenvolvimento, proporcionando feedback imediato, detectando falhas mais rapidamente e garantindo que apenas código validado e funcional seja promovido para ambientes de produção. Ao integrar os testes de API de forma contínua, as equipes conseguem entregar software de alta qualidade de forma ágil e sem interrupções.
 
 
 </span>
