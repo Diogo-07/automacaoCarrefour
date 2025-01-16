@@ -26,7 +26,7 @@ jobs:
         npm install newman -g  # Instala o Newman globalmente.
     - name: Run Postman tests
       run: |
-        newman run carrefour.postman_collection.json -e carrefour.postman_environment.json -r htmlextra  # Execute seus testes Postman com o Newman.
+        newman run usuarios/carrefour.postman_collection.json -e usuarios/carrefour.postman_environment.json -r htmlextra  # Execute seus testes Postman com o Newman.
     - name: Upload test results as artifact
       uses: actions/upload-artifact@v4
       with:
