@@ -18,7 +18,7 @@
 
 ##  Desafio de Automação Carrefour! 👋 
 
-#### Automação de testes de API para o Carrefour utilizando Postman para criar coleções de testes e Newman para execução automatizada em CI/CD. Valida status, formatos de resposta e desempenho das APIs.
+#### Automação de testes de API para o Carrefour utilizando Postman na criação de coleções de testes e o Newman na execução automatizada em CI/CD, valida status, formatos de resposta e desempenho das APIs.
 
 </span>
 
