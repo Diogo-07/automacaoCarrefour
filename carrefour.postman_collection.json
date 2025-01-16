@@ -1,0 +1,449 @@
+{
+	"info": {
+		"_postman_id": "8faf1e05-8a34-457a-8343-5630f1d5abb6",
+		"name": "Automação Banco Carrefour",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41099552"
+	},
+	"item": [
+		{
+			"name": "Lista de Usuário",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Pegando o response da requisição\r",
+							"responseJson = pm.response.json()\r",
+							"\r",
+							"// Verifica o status code se esta ok\r",
+							"pm.test(\"Status code está entre 200 e 299\", function () {\r",
+							"    // Definindo a variável para o código de status\r",
+							"    var statusCode = pm.response.code;\r",
+							"    // Verificando se o status code está dentro do intervalo esperado (200-299)\r",
+							"    if (statusCode >= 200 && statusCode <= 299) {\r",
+							"        pm.expect(statusCode).to.be.within(200, 299); // Validação da expectativa\r",
+							"    } else {\r",
+							"        pm.expect(statusCode).to.not.be.within(200, 299); // Validação de falha\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Verifica que o objeto quantidade não pode vir vazio\r",
+							"pm.test(\"Campo 'quantidade' não pode ser indefinido\", function () {\r",
+							"\r",
+							"    // Acessando o campo 'quantidade'\r",
+							"    var quantidade = responseJson.quantidade;\r",
+							"    // Verificando se 'quantidade' não é indefinido\r",
+							"    if (quantidade === undefined || quantidade === null) {\r",
+							"        pm.expect(quantidade).to.not.be.undefined; // Validação de que 'quantidade' não é indefinido\r",
+							"        pm.expect(quantidade).to.not.be.null; // Validação de que 'quantidade' não é nulo\r",
+							"    } else {\r",
+							"        pm.expect(quantidade).to.exist; // Validação de que 'quantidade' existe e é um valor válido\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Verifica o body de cada Objeto dentro do array\r",
+							"pm.test(\"Validação do primeiro usuário\", function () {\r",
+							"    // Verificando se 'usuarios' é uma lista\r",
+							"    pm.expect(responseJson.usuarios).to.be.an('array');\r",
+							"    // Verificando se o primeiro objeto tem os campos necessários\r",
+							"    var primeiroUsuario = responseJson.usuarios[0];\r",
+							"    // Aqui esta a validação se os valores retornados temessas propriedades\r",
+							"    pm.expect(primeiroUsuario).to.have.property('nome');\r",
+							"    pm.expect(primeiroUsuario).to.have.property('email');\r",
+							"    pm.expect(primeiroUsuario).to.have.property('password');\r",
+							"    pm.expect(primeiroUsuario).to.have.property('administrador');\r",
+							"    pm.expect(primeiroUsuario).to.have.property('_id');\r",
+							"});\r",
+							"\r",
+							"// A reposta não poderá vir vazia\r",
+							"pm.test(\"A propriedade 'usuarios' não deve ser null ou undefined\", function () {\r",
+							"    // Verificando se o campo 'usuarios' não é null ou undefined\r",
+							"    pm.expect(responseJson.usuarios).to.not.be.null;\r",
+							"    pm.expect(responseJson.usuarios).to.not.be.undefined;\r",
+							"});\r",
+							"\r",
+							"// Verifica o tempo de retorno da API\r",
+							"pm.test(\"O tempo de resposta é menor que 1000ms\", function () {\r",
+							"    // Validação do tempo de retorno\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"// Verifica se o campo 'Quantidade' é um numero e se ele é um inteiro\r",
+							"pm.test(\"O campo quantidade precisa ser um numero inteiro\", function () {\r",
+							"    // Valida se aqui ele é de fato um numero \r",
+							"    pm.expect(responseJson.quantidade).to.be.a('number');\r",
+							"    // Valida se o valor retornado é um numero inteiro\r",
+							"    pm.expect(responseJson.quantidade % 1).to.be.equal(0)\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/usuarios",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar Usuário",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Pegando o response da requisição\r",
+							"responseJson = pm.response.json()\r",
+							"\r",
+							"//Armazenando as variáveis para o ambiente\r",
+							"pm.environment.set(\"idUsuario\", responseJson._id);\r",
+							"\r",
+							"// Verifica o status code se esta ok\r",
+							"pm.test(\"Status code está entre 200 e 299\", function () {\r",
+							"    // Definindo a variável para o código de status\r",
+							"    var statusCode = pm.response.code;\r",
+							"    // Verificando se o status code está dentro do intervalo esperado (200-299)\r",
+							"    if (statusCode >= 200 && statusCode <= 299) {\r",
+							"        pm.expect(statusCode).to.be.within(200, 299); // Validação da expectativa\r",
+							"    } else {\r",
+							"        pm.expect(statusCode).to.not.be.within(200, 299); // Validação de falha\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Verifica que o response body não pode vir nulo ou undefined\r",
+							"pm.test(\"ResponseBody precisa retornar um objeto\", function () {\r",
+							"    // Asserção do response\r",
+							"    pm.expect(responseJson).not.be.null;\r",
+							"    pm.expect(responseJson).not.be.undefined;\r",
+							"\r",
+							"});\r",
+							"\r",
+							"// Verifica a mensagem de sucesso na criação do usuário\r",
+							"pm.test(\"Mensagem de sucesso na criação do usuário\", function () {\r",
+							"    // pegando a variavel message\r",
+							"    var message = responseJson.message;\r",
+							"    //validação do que se espera no cenário\r",
+							"    pm.expect(message).to.be.equals('Cadastro realizado com sucesso')\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ID não pode vir nulo\", function () {\r",
+							"    // pegando a variavel _id\r",
+							"    var id = responseJson._id;\r",
+							"    // realizando as validações necessárias\r",
+							"    pm.expect(id).not.be.null;\r",
+							"    pm.expect(id).not.be.undefined;\r",
+							"});\r",
+							"\r",
+							"// Verifica o tempo de retorno da API\r",
+							"pm.test(\"O tempo de resposta é menor que 1000ms\", function () {\r",
+							"    // Validação do tempo de retorno\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nome\": \"{{$randomNamePrefix}}\", // cria um nome de usuário aletório\r\n  \"email\": \"{{$randomEmail}}\", // cria um email de usuário aletório\r\n  \"password\": \"{{$randomPassword}}\", // cria uma senha de usuário aletório\r\n  \"administrador\": \"true\"\r\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/usuarios",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Busca Usuário por Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Pegando o response da requisição\r",
+							"responseJson = pm.response.json();\r",
+							"\r",
+							"// Armazenado as variáveis dentro do ambiente\r",
+							"pm.environment.set(\"nome\", responseJson.nome);\r",
+							"pm.environment.set(\"email\", responseJson.email);\r",
+							"pm.environment.set(\"password\", responseJson.password);\r",
+							"pm.environment.set(\"administrador\", responseJson.administrador);\r",
+							"\r",
+							"pm.test(\"Status code está entre 200 e 299\", function () {\r",
+							"    // Definindo a variável para o código de status\r",
+							"    var statusCode = pm.response.code;\r",
+							"    // Verificando se o status code está dentro do intervalo esperado (200-299)\r",
+							"    if (statusCode >= 200 && statusCode <= 299) {\r",
+							"        pm.expect(statusCode).to.be.within(200, 299); // Validação da expectativa\r",
+							"    } else {\r",
+							"        pm.expect(statusCode).to.not.be.within(200, 299); // Validação de falha\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Verifica se o _id criado esta igual ao usuário buscado\r",
+							"pm.test(\"Valida se o _id esta igual ao usuário criado\", function () {\r",
+							"    //Asserção do valor guardado em variável com o valor retornado da API\r",
+							"    pm.expect(pm.environment.get(\"idUsuario\")).to.be.equals(responseJson._id);\r",
+							"});\r",
+							"\r",
+							"// Verifica as propriedades retornadas em cada campos da resposta\r",
+							"pm.test(\"Confirma as propriedades da resposta retornada\", function () {\r",
+							"    //Validação de cada campo\r",
+							"    pm.expect(responseJson).to.have.property('nome');\r",
+							"    pm.expect(responseJson).to.have.property('email');\r",
+							"    pm.expect(responseJson).to.have.property('password');\r",
+							"    pm.expect(responseJson).to.have.property('administrador');\r",
+							"    pm.expect(responseJson).to.have.property('_id');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"A resposta é um objeto, não um array\", function () {\r",
+							"    // Verifica se é um objeto\r",
+							"    pm.expect(responseJson).to.be.an('object');  \r",
+							"    // Verifica se não é um array\r",
+							"    pm.expect(Array.isArray(responseJson)).to.be.false;  \r",
+							"});\r",
+							"\r",
+							"// Verifica se cada campo do Objeto existe um valor retornado\r",
+							"pm.test(\"Campos retornados não podem vir nulos\", function () {\r",
+							"    //Validação dos campos\r",
+							"    pm.expect(responseJson.nome).to.be.not.null;\r",
+							"    pm.expect(responseJson.email).to.be.not.null;\r",
+							"    pm.expect(responseJson.password).to.be.not.null;\r",
+							"    pm.expect(responseJson.administrador).to.be.not.null;\r",
+							"    pm.expect(responseJson._id).to.be.not.null;\r",
+							"});\r",
+							"\r",
+							"// Verifica o tempo de retorno da API\r",
+							"pm.test(\"O tempo de resposta é menor que 1000ms\", function () {\r",
+							"    // Validação do tempo de retorno\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/usuarios/{{idUsuario}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"usuarios",
+						"{{idUsuario}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Altera Usuário",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Pegando o response da requisição\r",
+							"responseJson = pm.response.json()\r",
+							"\r",
+							"pm.test(\"Status code está entre 200 e 299\", function () {\r",
+							"    // Definindo a variável para o código de status\r",
+							"    var statusCode = pm.response.code;\r",
+							"    // Verificando se o status code está dentro do intervalo esperado (200-299)\r",
+							"    if (statusCode >= 200 && statusCode <= 299) {\r",
+							"        pm.expect(statusCode).to.be.within(200, 299); // Validação da expectativa\r",
+							"    } else {\r",
+							"        pm.expect(statusCode).to.not.be.within(200, 299); // Validação de falha\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Verifica o tempo de retorno da API\r",
+							"pm.test(\"O tempo de resposta é menor que 1000ms\", function () {\r",
+							"    // Validação do tempo de retorno\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirma a propriedade da resposta retornada\", function () {\r",
+							"    //Validação de cada campo\r",
+							"    pm.expect(responseJson).to.have.property('message');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"A resposta é um objeto, não um array\", function () {\r",
+							"    // Verifica se é um objeto\r",
+							"    pm.expect(responseJson).to.be.an('object');  \r",
+							"    // Verifica se não é um array\r",
+							"    pm.expect(Array.isArray(responseJson)).to.be.false;  \r",
+							"});\r",
+							"\r",
+							"// Verifica se o campo do Objeto existe um valor retornado\r",
+							"pm.test(\"Campos retornados não podem vir nulos\", function () {\r",
+							"    //Validação dos campos\r",
+							"    pm.expect(responseJson.message).to.be.not.null;   \r",
+							"});\r",
+							"\r",
+							"// Verifica mensagem de resposta \r",
+							"pm.test(\"A mensagem 'Registro alterado com sucesso' está presente\", function () {\r",
+							"    //Validação da mensagem\r",
+							"    pm.expect(responseJson.message).to.include(\"Registro alterado com sucesso\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"{{$randomNamePrefix}}\",\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"administrador\": \"{{administrador}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/usuarios/{{idUsuario}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"usuarios",
+						"{{idUsuario}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Exclui Usuário",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Pegando o response da requisição\r",
+							"responseJson = pm.response.json()\r",
+							"\r",
+							"pm.test(\"Status code está entre 200 e 299\", function () {\r",
+							"    // Definindo a variável para o código de status\r",
+							"    var statusCode = pm.response.code;\r",
+							"    // Verificando se o status code está dentro do intervalo esperado (200-299)\r",
+							"    if (statusCode >= 200 && statusCode <= 299) {\r",
+							"        pm.expect(statusCode).to.be.within(200, 299); // Validação da expectativa\r",
+							"    } else {\r",
+							"        pm.expect(statusCode).to.not.be.within(200, 299); // Validação de falha\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Verifica o tempo de retorno da API\r",
+							"pm.test(\"O tempo de resposta é menor que 1000ms\", function () {\r",
+							"    // Validação do tempo de retorno\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirma a propriedade da resposta retornada\", function () {\r",
+							"    //Validação de cada campo\r",
+							"    pm.expect(responseJson).to.have.property('message');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"A resposta é um objeto, não um array\", function () {\r",
+							"    // Verifica se é um objeto\r",
+							"    pm.expect(responseJson).to.be.an('object');  \r",
+							"    // Verifica se não é um array\r",
+							"    pm.expect(Array.isArray(responseJson)).to.be.false;  \r",
+							"});\r",
+							"\r",
+							"// Verifica se o campo do Objeto existe um valor retornado\r",
+							"pm.test(\"Campos retornados não podem vir nulos\", function () {\r",
+							"    //Validação dos campos\r",
+							"    pm.expect(responseJson.message).to.be.not.null;   \r",
+							"});\r",
+							"\r",
+							"// Verifica mensagem de resposta \r",
+							"pm.test(\"A mensagem 'Registro excluído com sucesso' está presente\", function () {\r",
+							"    //Validação da mensagem\r",
+							"    pm.expect(responseJson.message).to.include(\"Registro excluído com sucesso\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/usuarios/{{idUsuario}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"usuarios",
+						"{{idUsuario}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
